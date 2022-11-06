@@ -133,6 +133,9 @@ class ImageInnotation(Innotation, DataMixin):
                     pngmode = ('L','LA','RGB','RGBA')[npim.shape[2]-1]
                 else:
                     npim = np.expand_dims(npim, axis=-1) # Need a third axis for channel
+
+                h, w, ch = npim.shape
+                npim = npim.reshape(h, w * ch) 
                 pngim = png.from_array(npim, mode=pngmode) # Don't have BGR available so flipped to RGB above
                 pngim.write(pngbytes) if hasattr(pngim, 'write') else pngim.save(pngbytes) # PyPNG API due to change after v0.0.19
                 self.get_widget().value = pngbytes.getvalue()
